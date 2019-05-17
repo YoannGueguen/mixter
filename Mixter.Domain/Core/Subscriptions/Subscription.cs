@@ -36,6 +36,11 @@ namespace Mixter.Domain.Core.Subscriptions
         [Command]
         public void NotifyFollower(IEventPublisher eventPublisher, MessageId messageId)
         {
+            if (_projection.Unfollowed)
+            {
+                return;
+            }
+            
             eventPublisher.Publish(new FolloweeMessageQuacked(_projection.Id, messageId));
         }
         
@@ -45,6 +50,8 @@ namespace Mixter.Domain.Core.Subscriptions
             private readonly IList<SubscriptionId> _subscriptions = new List<SubscriptionId>();
 
             public SubscriptionId Id { get; private set; }
+            
+            public bool Unfollowed { get; private set; }
 
             public IEnumerable<SubscriptionId> Subscriptions
             {
@@ -66,7 +73,7 @@ namespace Mixter.Domain.Core.Subscriptions
 
             private void When(UserUnfollowed evt)
             {
-                
+                Unfollowed = true;
             }
         }
     }
