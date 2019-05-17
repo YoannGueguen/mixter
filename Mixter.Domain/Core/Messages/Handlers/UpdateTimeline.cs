@@ -5,7 +5,7 @@ namespace Mixter.Domain.Core.Messages.Handlers
 {
     [Handler]
     public class UpdateTimeline : 
-        IEventHandler<MessageQuacked>
+        IEventHandler<MessageQuacked>, IEventHandler<MessageDeleted>
     {
         private readonly ITimelineMessageRepository _repository;
         
@@ -22,6 +22,16 @@ namespace Mixter.Domain.Core.Messages.Handlers
             }
             
             _repository.Save(new TimelineMessageProjection(evt.Author, evt.Author, evt.Content, evt.Id));
+        }
+        
+        public void Handle(MessageDeleted evt)
+        {
+            if (_repository == null)
+            {
+                return;
+            }
+            
+            _repository.Delete(evt.MessageId);
         }
     }
 }
