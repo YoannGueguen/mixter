@@ -1,4 +1,6 @@
-﻿namespace Mixter.Domain.Core.Subscriptions.Events
+﻿using Mixter.Domain.Identity;
+
+namespace Mixter.Domain.Core.Subscriptions.Events
 {
     [Event]
     public struct UserFollowed : IDomainEvent
