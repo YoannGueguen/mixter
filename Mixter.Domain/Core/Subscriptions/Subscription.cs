@@ -10,6 +10,14 @@ namespace Mixter.Domain.Core.Subscriptions
     public class Subscription
     {
         private static readonly DecisionProjection _projection = new DecisionProjection();
+
+        public Subscription(IEnumerable<IDomainEvent> events)
+        {
+            foreach (var @event in events)
+            {
+                _projection.Apply(@event);
+            }
+        }
         
         [Command]
         public static void FollowUser(IEventPublisher eventPublisher, UserId Follower, UserId Followee)
@@ -17,6 +25,12 @@ namespace Mixter.Domain.Core.Subscriptions
             var subscription = new SubscriptionId(Follower, Followee);
             
             eventPublisher.Publish(new UserFollowed(subscription));
+        }
+
+        [Command]
+        public void Unfollow(IEventPublisher eventPublisher)
+        {
+            eventPublisher.Publish(new UserUnfollowed(_projection.Id));
         }
         
         [Projection]
