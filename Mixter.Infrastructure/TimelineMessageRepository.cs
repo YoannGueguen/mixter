@@ -14,6 +14,11 @@ namespace Mixter.Infrastructure
             _messages.Add(messageProjection);
         }
 
+        public void Delete(MessageId msgId)
+        {
+            _messages.RemoveWhere(x => x.MessageId.Equals(msgId));
+        }
+
         public IEnumerable<TimelineMessageProjection> GetMessagesOfUser(UserId userId)
         {
             return _messages.Where(o => o.OwnerId.Equals(userId));
