@@ -26,6 +26,11 @@ namespace Mixter.Domain.Core.Messages
             return messageId;
         }
 
+        public void Delete(IEventPublisher eventPublisher, UserId deleter)
+        {
+            eventPublisher.Publish(new MessageDeleted(_projection.Id, deleter));
+        }
+
         [Command]
         public void Requack(IEventPublisher eventPublisher, UserId requacker)
         {
