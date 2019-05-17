@@ -49,6 +49,11 @@ namespace Mixter.Domain.Core.Messages
                 return;
             }
 
+            if (_projection.IsDeleted)
+            {
+                return;
+            }
+
             var evt = new MessageRequacked(_projection.Id, requacker);
             eventPublisher.Publish(evt);
         }
