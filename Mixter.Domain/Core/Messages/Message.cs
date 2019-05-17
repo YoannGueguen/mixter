@@ -28,6 +28,11 @@ namespace Mixter.Domain.Core.Messages
 
         public void Delete(IEventPublisher eventPublisher, UserId deleter)
         {
+            if (deleter.Email != _projection.Author.Email)
+            {
+                return;
+            }
+            
             eventPublisher.Publish(new MessageDeleted(_projection.Id, deleter));
         }
 
