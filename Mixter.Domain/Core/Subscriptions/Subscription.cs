@@ -66,6 +66,7 @@ namespace Mixter.Domain.Core.Subscriptions
 
             private void When(UserFollowed evt)
             {
+                Unfollowed = false;
                 Id = evt.SubscriptionId;
                 
                 _subscriptions.Add(evt.SubscriptionId);
