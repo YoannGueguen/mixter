@@ -7,7 +7,7 @@ namespace Mixter.Domain.Core.Messages
 {
     [Aggregate]
     public class Message
-    {
+    {        
         private readonly DecisionProjection _projection = new DecisionProjection();
 
         public Message(IEnumerable<IDomainEvent> events)
@@ -29,6 +29,11 @@ namespace Mixter.Domain.Core.Messages
         public void Delete(IEventPublisher eventPublisher, UserId deleter)
         {
             if (deleter.Email != _projection.Author.Email)
+            {
+                return;
+            }
+
+            if (_projection.IsDeleted)
             {
                 return;
             }
@@ -56,6 +61,8 @@ namespace Mixter.Domain.Core.Messages
             public MessageId Id { get; private set; }
 
             public UserId Author { get; private set; }
+            
+            public bool IsDeleted { get; private set; }
 
             public IEnumerable<UserId> Quackers
             {
@@ -66,6 +73,7 @@ namespace Mixter.Domain.Core.Messages
             {
                 AddHandler<MessageQuacked>(When);
                 AddHandler<MessageRequacked>(When);
+                AddHandler<MessageDeleted>(When);
             }
 
             private void When(MessageQuacked evt)
@@ -78,6 +86,11 @@ namespace Mixter.Domain.Core.Messages
             private void When(MessageRequacked evt)
             {
                 _quackers.Add(evt.Requacker);
+            }
+            
+            private void When(MessageDeleted evt)
+            {
+                IsDeleted = true;
             }
         }
     }

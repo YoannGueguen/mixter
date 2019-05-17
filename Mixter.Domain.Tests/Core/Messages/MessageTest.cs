@@ -110,7 +110,8 @@ namespace Mixter.Domain.Tests.Core.Messages
         {
             var message = CreateMessage(
                 new MessageQuacked(MessageId, Author, MessageContent),
-                new MessageDeleted(MessageId, Author));
+                new MessageDeleted(MessageId, Author)
+            );
 
             message.Delete(_eventPublisher, Author);
 
