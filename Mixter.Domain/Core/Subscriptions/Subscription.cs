@@ -32,6 +32,12 @@ namespace Mixter.Domain.Core.Subscriptions
         {
             eventPublisher.Publish(new UserUnfollowed(_projection.Id));
         }
+
+        [Command]
+        public void NotifyFollower(IEventPublisher eventPublisher, MessageId messageId)
+        {
+            eventPublisher.Publish(new FolloweeMessageQuacked(_projection.Id, messageId));
+        }
         
         [Projection]
         private class DecisionProjection : DecisionProjectionBase
